@@ -33,9 +33,9 @@ const App = () => {
 
     let subscription = await registration.pushManager.getSubscription();
 
-    // if(subscription) {
-    //   await unsubscribe();
-    // }
+    if(subscription) {
+      await unsubscribe();
+    }
     // Subscribe to push notifications
     subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
@@ -86,3 +86,5 @@ const App = () => {
 };
 
 export default App;
+
+// curl -X POST https://push-api-backend.onrender.com/notify/ -H "Content-Type: application/json" -d "{\"room\": \"Room 1\", \"message\": \"test message\"}"

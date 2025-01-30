@@ -65,13 +65,27 @@ const App = () => {
     return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
   };
 
+  const sendMessage = async(room) => {
+    const response = await fetch("https://push-api-backend.onrender.com/notify/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        room: room,
+        message: "test message",
+      }),
+    });
+  }
+
   return (
     <div>
       <h1>Join Rooms for Notifications</h1>
       <ul>
         {rooms.map((room, index) => (
           <li key={index}>
-            <button onClick={() => joinRoom(room)}>Join {room}</button>
+            <button style={{marginRight: 20}} onClick={() => joinRoom(room)}>Join {room}</button>
+            <button onClick={() => sendMessage(room)}>Send message to {room}</button>
           </li>
         ))}
       </ul>

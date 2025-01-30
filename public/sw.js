@@ -11,8 +11,8 @@ self.addEventListener('push', function(event) {
 	let notificationTitle = 'Hello';
 	const notificationOptions = {
 		body: 'Thanks for sending this push msg.',
-		icon: './images/logo-192x192.png',
-		badge: './images/badge-72x72.png',
+		icon: './logo-192x192.png',
+		badge: './badge-72x72.png',
 		data: {
 			url: 'https://web.dev/push-notifications-overview/',
 		},

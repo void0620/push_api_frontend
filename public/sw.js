@@ -1,45 +1,19 @@
-'use strict';
-
-/* eslint-env browser, serviceworker */
-
-self.addEventListener('install', () => {
-	self.skipWaiting();
-});
-
-self.addEventListener('push', function(event) {
-	console.log('Push message received.');
-	let notificationTitle = 'Hello';
-	const notificationOptions = {
-		body: 'Thanks for sending this push msg.',
-		icon: './logo-192x192.png',
-		badge: './badge-72x72.png',
-		data: {
-			url: 'https://web.dev/push-notifications-overview/',
-		},
-	};
-
+self.addEventListener("push", function (event) {
+	let data = { title: "Default Title", body: "New Notification!" };
+  
 	if (event.data) {
-		const dataText = event.data.text();
-		notificationTitle = 'Received Payload';
-		notificationOptions.body = `Push data: '${dataText}'`;
+	  try {
+		data = event.data.json();
+	  } catch (error) {
+		console.error("Push event error:", error);
+	  }
 	}
-
+  
 	event.waitUntil(
-		self.registration.showNotification(
-			notificationTitle,
-			notificationOptions,
-		),
+	  self.registration.showNotification(data.title, {
+		body: data.body,
+		icon: "/logo192.png",
+	  })
 	);
-});
-
-self.addEventListener('notificationclick', function(event) {
-	console.log('Notification clicked.');
-	event.notification.close();
-
-	let clickResponsePromise = Promise.resolve();
-	if (event.notification.data && event.notification.data.url) {
-		clickResponsePromise = clients.openWindow(event.notification.data.url);
-	}
-
-	event.waitUntil(clickResponsePromise);
-});
+  });
+  

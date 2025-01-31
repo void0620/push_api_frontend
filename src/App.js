@@ -23,7 +23,7 @@ const App = () => {
       });
 
       // Send subscription to backend
-      await axios.post("http://localhost:5000/subscribe", { subscription, room });
+      await axios.post("https://push-api-backend.onrender.com/subscribe", { subscription, room });
 
       setSubscribedRooms((prev) => [...prev, room]);
       alert(`Subscribed to ${room}`);
@@ -33,7 +33,7 @@ const App = () => {
   };
 
   const sendNotification = (roomId) => {
-    fetch("http://localhost:5000/send-notification", {
+    fetch("https://push-api-backend.onrender.com/send-notification", {
       method: "POST",
       headers: {
         "Content-Type": "application/json" // Ensures the server knows the data format
@@ -47,7 +47,7 @@ const App = () => {
   }
 
   const clearSubscription = () => {
-    fetch("http://localhost:5000/clearSubscription", {
+    fetch("https://push-api-backend.onrender.com/clearSubscription", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

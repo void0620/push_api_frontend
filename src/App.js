@@ -25,7 +25,7 @@ const App = () => {
       const unParsedSubscription = JSON.parse(parsedSubscription);
       console.log(unParsedSubscription);
       // Send subscription to backend
-      await fetch("http://localhost:5000/subscribe", {
+      await fetch("https://push-api-backend.onrender.com/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json" // Ensures the server knows the data format
@@ -46,7 +46,7 @@ const App = () => {
   };
 
   const sendNotification = (roomId) => {
-    fetch("http://localhost:5000/send-notification", {
+    fetch("https://push-api-backend.onrender.com/send-notification", {
       method: "POST",
       headers: {
         "Content-Type": "application/json" // Ensures the server knows the data format
@@ -60,7 +60,7 @@ const App = () => {
   }
 
   const clearSubscription = () => {
-    fetch("http://localhost:5000/clearSubscription", {
+    fetch("https://push-api-backend.onrender.com/clearSubscription", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

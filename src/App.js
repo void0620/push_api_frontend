@@ -6,7 +6,7 @@ const PUBLIC_VAPID_KEY = "BI5gWL3u-paHcH32d1wSuQ24RtHV1P6YSk3tuH9aacnUmyrHrj5oZ7
 const App = () => {
   const [subscribedRooms, setSubscribedRooms] = useState([]);
 
-  const subscribeToRoom = async (room) => {
+  const subscribeToRoom = async (roomId) => {
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
       alert("Push notifications are not supported in this browser.");
       return;
@@ -21,19 +21,32 @@ const App = () => {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY),
       });
-
+      const parsedSubscription = JSON.stringify(subscription);
+      const unParsedSubscription = JSON.parse(parsedSubscription);
+      console.log(unParsedSubscription);
       // Send subscription to backend
-      await axios.post("https://push-api-backend.onrender.com/subscribe", { subscription, room });
+      await fetch("http://localhost:5000/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json" // Ensures the server knows the data format
+        },
+        body: JSON.stringify({
+          endpoint: unParsedSubscription.endpoint,
+          p256dh: unParsedSubscription.keys.p256dh,
+          auth: unParsedSubscription.keys.auth,
+          room: roomId
+        })
+      })
 
-      setSubscribedRooms((prev) => [...prev, room]);
-      alert(`Subscribed to ${room}`);
+      setSubscribedRooms((prev) => [...prev, roomId]);
+      alert(`Subscribed to ${roomId}`);
     } catch (error) {
       console.error("Subscription error:", error);
     }
   };
 
   const sendNotification = (roomId) => {
-    fetch("https://push-api-backend.onrender.com/send-notification", {
+    fetch("http://localhost:5000/send-notification", {
       method: "POST",
       headers: {
         "Content-Type": "application/json" // Ensures the server knows the data format
@@ -47,7 +60,7 @@ const App = () => {
   }
 
   const clearSubscription = () => {
-    fetch("https://push-api-backend.onrender.com/clearSubscription", {
+    fetch("http://localhost:5000/clearSubscription", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

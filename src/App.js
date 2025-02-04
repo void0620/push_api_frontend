@@ -6,7 +6,7 @@ const PUBLIC_VAPID_KEY = "BI5gWL3u-paHcH32d1wSuQ24RtHV1P6YSk3tuH9aacnUmyrHrj5oZ7
 const App = () => {
   const [subscribedRooms, setSubscribedRooms] = useState([]);
 
-  const subscribeToPush = async (roomId) => {
+  const subscribeToRoom = async (roomId) => {
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
       alert("Push notifications are not supported in this browser.");
       return;
@@ -42,15 +42,6 @@ const App = () => {
     } catch (error) {
       console.error("Subscription error:", error);
     }
-  };
-
-  const subscribeToRoom = async (roomId) => {
-    Notification.requestPermission().then(permission => {
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
-        subscribeToPush(roomId);
-      }
-    });
   };
 
   const sendNotification = (roomId) => {

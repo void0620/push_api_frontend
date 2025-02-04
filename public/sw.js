@@ -1,6 +1,6 @@
 self.addEventListener("push", function (event) {
 	let data = { title: "Default Title", body: "New Notification!" };
-  
+	alert("Receive message");
 	if (event.data) {
 	  try {
 		data = event.data.json();

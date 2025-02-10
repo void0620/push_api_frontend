@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+// import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 const PUBLIC_VAPID_KEY = "BI5gWL3u-paHcH32d1wSuQ24RtHV1P6YSk3tuH9aacnUmyrHrj5oZ7pNWJmYiUnqEuMM7OeX5smJRQ8vIXrXus4"; // Replace with your actual VAPID key
 
 const App = () => {
   const [subscribedRooms, setSubscribedRooms] = useState([]);
-
+  // const location = useLocation();
   const subscribeToRoom = async (roomId) => {
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
       alert("Push notifications are not supported in this browser.");
@@ -22,9 +23,9 @@ const App = () => {
       });
       const parsedSubscription = JSON.stringify(subscription);
       const unParsedSubscription = JSON.parse(parsedSubscription);
-      console.log(unParsedSubscription);
+      console.log(subscription);
       // Send subscription to backend
-      await fetch("https://push-api-backend.onrender.com/subscribe", {
+      await fetch("http://localhost:5000/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json" // Ensures the server knows the data format
@@ -45,7 +46,7 @@ const App = () => {
   };
 
   const sendNotification = (roomId) => {
-    fetch("https://push-api-backend.onrender.com/send-notification", {
+    fetch("http://localhost:5000/send-notification", {
       method: "POST",
       headers: {
         "Content-Type": "application/json" // Ensures the server knows the data format
@@ -58,13 +59,18 @@ const App = () => {
     })
   }
 
-  const clearSubscription = () => {
-    fetch("https://push-api-backend.onrender.com/clearSubscription", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  const clearSubscription = async () => {
+    try {
+      await fetch("http://localhost:5000/clearSubscription", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      setSubscribedRooms([]);
+    } catch (error) {
+      console.error(error);
+    }
   }
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
